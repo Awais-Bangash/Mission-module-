@@ -1,8 +1,6 @@
 function amplifier_chain_optimizer()
     clc; clear;
-
     fprintf('--- Amplifier Chain Noise Optimizer ---\n');
-
     % Input number of amplifiers
     n = input('Enter the number of amplifiers: ');
 
@@ -24,7 +22,6 @@ function amplifier_chain_optimizer()
     NFs_user = 10.^(arrayfun(@(x) x.NF_dB, amps) / 10);
     nf_total_user = NFs_user(1);
     gain_product_user = 1;
-    
     
     for i = 2:n
         gain_product_user = gain_product_user * gains_user(i-1);

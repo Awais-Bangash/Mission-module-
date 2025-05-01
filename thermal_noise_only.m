@@ -1,6 +1,5 @@
 function thermal_noise_power()
     clc;
-
     fprintf('--- Thermal Noise Power Calculator ---\n');
 
     % Boltzmann constant
