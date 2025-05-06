@@ -1,6 +1,8 @@
 %Function to produce and plot additive white Gaussian noise for a given
 %noise power
-function plot_awgn(P_dBm)
+%Takes parameters: noise power in dBm, boolean on using bp filter, bp
+%filter lower edge, bp filter upper edge
+function plot_awgn(P_dBm, useBP, bp_f1, bp_f2)
     % Realistic real-world analog sampling frequency
     fs_analog = 200E9;
     
@@ -24,7 +26,17 @@ function plot_awgn(P_dBm)
 
     MagFFT_analog_dBm = 10*log10(w.*MagFFT_analog.^2) + 30;
 
-    % Plotting 
+    % Bandpass Filter
+    if useBP
+        [b,a] = butter(5, [bp_f1 bp_f2]/(fs_analog/2), 'bandpass');
+        awgn_bp = filtfilt(b, a, awgn);   % zero‑phase filtered noise
+        MagFFT_bp        = 2*abs(fftshift(fft(awgn_bp, Ns+zero_pad))/Ns);
+        MagFFT_bp_dBm    = 10*log10(w.*MagFFT_bp.^2) + 30;
+    end
+
+
+    % Plotting    
+    subplot(2, 1, 1);
     max_val = max(MagFFT_analog_dBm); 
     min_val = min(MagFFT_analog_dBm);
     ylimFD = [min_val-10 max_val+10]; % Automatic scaling to output AWGN
@@ -37,4 +49,24 @@ function plot_awgn(P_dBm)
     title('AWGN Spectra','FontSize',20)
     xlim(xlimFD)
     ylim(ylimFD);
+
+    if useBP
+        max_val = max(MagFFT_bp_dBm); 
+        min_val = min(MagFFT_bp_dBm);
+        ylimFD = [min_val-10 max_val+10]; % Automatic scaling to output AWGN
+        xlimFD = [-100 100];
+        subplot(2, 1, 2);
+        plot(freq_analog/1E9, MagFFT_bp_dBm, 'r', 'LineWidth', 2.5)
+        grid on; grid minor;
+        set(gca, 'FontSize', 18)
+        xlabel('Frequency [GHz]', 'FontSize',20)
+        ylabel('AWGN Power [dBm]', 'FontSize',20)
+        title('AWGN Spectra with Bandpass Filter','FontSize',20)
+        xlim(xlimFD);
+        ylim(ylimFD);
+        xline(bp_f1/1e9, '--k', 'LineWidth', 2.5); % Plot BP filter range
+        xline(bp_f2/1e9, '--k', 'LineWidth', 2.5);
+        xline(-bp_f1/1e9, '--k', 'LineWidth', 2.5);
+        xline(-bp_f2/1e9, '--k', 'LineWidth', 2.5);
+    end
 end
