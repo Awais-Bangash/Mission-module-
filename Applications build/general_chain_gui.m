@@ -34,7 +34,7 @@ function general_chain_gui()
         'ButtonPushedFcn', @(btn,event) generateFields(fig, nField.Value));
 end
 
-%%
+%%generate fields button pressed
 function generateFields(fig, n)
     % Clear previous panel if it exists
     delete(findall(fig, 'Tag', 'AmpPanel'));
@@ -67,7 +67,7 @@ function generateFields(fig, n)
     uieditfield(ampPanel, 'numeric', 'Tag', 'PinField', 'Position', [160 startY 70 22]);
 
     startY = startY - spacingY;
-
+    %% Create fields based user entered inputs 
     for i = 1:n
         y = startY - (i - 1) * spacingY;
 
