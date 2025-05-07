@@ -63,8 +63,8 @@ function generateFields(fig, n)
     startY = startY - spacingY;
 
     % Input signal power
-    uilabel(ampPanel, 'Position', [10 startY 150 22], 'Text', 'Input Signal Power (dBm):');
-    uieditfield(ampPanel, 'numeric', 'Tag', 'PinField', 'Position', [160 startY 70 22]);
+    uilabel(ampPanel, 'Position', [10 startY 200 22], 'Text', 'Input Signal Power(dBm) for SNR:');
+    uieditfield(ampPanel, 'numeric', 'Tag', 'PinField', 'Position', [200 startY 70 22]);
 
     startY = startY - spacingY;
     %% Create fields based user entered inputs 
@@ -95,12 +95,12 @@ function generateFields(fig, n)
         'Position', [20 y 100 30], ...
         'ButtonPushedFcn', @(btn,event) calculateNF(fig, n));
 end
-%%%%%
+%%Calculate button pressed 
 function calculateNF(fig, n)
     names = strings(1, n);
     gains_dB = zeros(1, n);
     NFs_dB = zeros(1, n);
-
+    
     for i = 1:n
         nameField = findobj(fig, 'Tag', sprintf('nameField%d', i));
         gainField = findobj(fig, 'Tag', sprintf('gainField%d', i));
