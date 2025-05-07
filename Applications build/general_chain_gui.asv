@@ -268,9 +268,6 @@ function plot_awgn_signal(bandwidth, P_dBm, useBP, bp_f1, bp_f2, useLP, lp_fc, b
     xlabel('Frequency [GHz]', 'FontSize',20)
     ylabel('AWGN Signal Power [dBm]', 'FontSize',20)
     title('AWGN Signal Spectra','FontSize',20)
-    if(best)
-            title('AWGN Signal Spectra (Best Configuration)','FontSize',20)
-    end
     xlim(xlimFD)
     ylim(ylimFD);
 
@@ -286,9 +283,6 @@ function plot_awgn_signal(bandwidth, P_dBm, useBP, bp_f1, bp_f2, useLP, lp_fc, b
         xlabel('Frequency [GHz]', 'FontSize',20)
         ylabel('AWGN Signal Power [dBm]', 'FontSize',20)
         title('AWGN Signal Spectra with Bandpass Filter','FontSize',20)
-        if(best)
-            title('AWGN Signal Spectra with Bandpass Filter (Best Configuration)','FontSize',20)
-        end
         xlim(xlimFD);
         ylim(ylimFD);
         xline(bp_f1/1e9, '--k', 'LineWidth', 2.5); % Plot BP filter range
@@ -309,9 +303,6 @@ function plot_awgn_signal(bandwidth, P_dBm, useBP, bp_f1, bp_f2, useLP, lp_fc, b
         xlabel('Frequency [GHz]', 'FontSize',20)
         ylabel('AWGN Signal Power [dBm]', 'FontSize',20)
         title('AWGN Signal Spectra with Low-Pass Filter','FontSize',20)
-        if(best)
-            title('AWGN Signal Spectra with Low-Pass Filter (Best Configuration)','FontSize',20)
-        end
         xlim(xlimFD);
         ylim(ylimFD);
         xline(lp_fc/1e9, '--k', 'LineWidth', 2.5); % Plot LP filter cutoff

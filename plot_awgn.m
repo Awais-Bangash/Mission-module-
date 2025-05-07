@@ -20,18 +20,17 @@ function plot_awgn_signal(bandwidth, P_dBm, useBP, bp_f1, bp_f2, useLP, lp_fc)
     awgn_signal = sqrt(10.^((P_dBm + 30)/10) * 50) .* randn(150E9/1E6,1);   % awgn_signal with power P_dBm on 50 ohm line
 
 
-    Ns         = length(awgn_signal);                   % number of samples
+    Ns         = length(awgn_signal);            % number of samples
     Fs         = 1/mean(diff(t_analog));         % sample‑rate from time vector
     MagFFT_analog = 2*abs(fftshift(fft(awgn_signal, Ns+zero_pad))/Ns);
     freq_analog   = linspace(-Fs/2, Fs/2, Ns+zero_pad);
 
     MagFFT_analog_dBm = 10*log10(w.*MagFFT_analog.^2) + 30;
     
-    disp(mean(MagFFT_analog_dBm))
 
     % Bandpass Filter
     if useBP
-        [b,a] = butter(5, [bp_f1 bp_f2]/(fs_analog/2), 'bandpass');
+        [b,a] = butter(5, [bp_f1 bp_f2]/(bandwidth), 'bandpass');
         awgn_signal_bp = filtfilt(b, a, awgn_signal);   % zero‑phase filtered noise
         MagFFT_bp        = 2*abs(fftshift(fft(awgn_signal_bp, Ns+zero_pad))/Ns);
         MagFFT_bp_dBm    = 10*log10(w.*MagFFT_bp.^2) + 30;
@@ -39,8 +38,8 @@ function plot_awgn_signal(bandwidth, P_dBm, useBP, bp_f1, bp_f2, useLP, lp_fc)
 
     % Lowpass Filter
     if useLP
-        [bl, al] = butter(5, lp_fc/(fs_analog/2), 'low');   % 5th‑order LPF
-        awgn_signal_lp  = filtfilt(bl, al, awgn_signal);                 % zero‑phase output
+        [bl, al] = butter(5, lp_fc/(bandwidth), 'low');   % 5th‑order LPF
+        awgn_signal_lp  = filtfilt(bl, al, awgn_signal);    % zero‑phase output
         MagFFT_lp     = 2*abs(fftshift(fft(awgn_signal_lp, Ns+zero_pad))/Ns);
         MagFFT_lp_dBm = 10*log10(w .* MagFFT_lp.^2) + 30;
     end
