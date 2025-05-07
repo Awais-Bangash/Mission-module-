@@ -6,15 +6,35 @@ function general_chain_gui()
         'Text','Note: Element 1 is closest to the receiver antenna.', ...
         'FontWeight','bold');
 
-    % UI components
+    % Number of elements
     uilabel(fig,'Position',[30 590 180 22],'Text','Number of Elements:');
     nField = uieditfield(fig,'numeric','Position',[200 590 100 22]);
 
-    % Button to generate input fields
-    uibutton(fig,'Text','Generate Fields','Position',[320 590 120 22], ...
+    %% Filter options
+    % Bandpass filter checkbox
+    bpCheck = uicheckbox(fig, 'Text', 'Use Bandpass Filter', ...
+        'Position', [30 550 150 22], 'Value', true, 'Tag', 'BPCheck');
+
+    % Bandpass frequency inputs
+    uilabel(fig,'Position',[200 550 100 22],'Text','BP f1 (Hz):');
+    bpF1Field = uieditfield(fig,'numeric','Position',[280 550 80 22], 'Tag', 'BPF1');
+    uilabel(fig,'Position',[370 550 100 22],'Text','BP f2 (Hz):');
+    bpF2Field = uieditfield(fig,'numeric','Position',[450 550 80 22], 'Tag', 'BPF2');
+
+    % Lowpass filter checkbox
+    lpCheck = uicheckbox(fig, 'Text', 'Use Lowpass Filter', ...
+        'Position', [30 520 150 22], 'Value', true, 'Tag', 'LPCheck');
+
+    % Lowpass cutoff input
+    uilabel(fig,'Position',[200 520 130 22],'Text','LP Cutoff (Hz):');
+    lpFcField = uieditfield(fig,'numeric','Position',[330 520 100 22], 'Tag', 'LPFC');
+
+    % Generate button
+    uibutton(fig,'Text','Generate Fields','Position',[250 450 120 40], ...
         'ButtonPushedFcn', @(btn,event) generateFields(fig, nField.Value));
 end
 
+%%
 function generateFields(fig, n)
     % Clear previous panel if it exists
     delete(findall(fig, 'Tag', 'AmpPanel'));
@@ -75,7 +95,7 @@ function generateFields(fig, n)
         'Position', [20 y 100 30], ...
         'ButtonPushedFcn', @(btn,event) calculateNF(fig, n));
 end
-
+%%%%%
 function calculateNF(fig, n)
     names = strings(1, n);
     gains_dB = zeros(1, n);
@@ -173,8 +193,17 @@ function calculateNF(fig, n)
         msg, G_best_dB, NF_best_dB, Pout_best, Pout_noise_best, SNR_BEST_OUT);
 
     uialert(fig, msg, 'Calculation Results');
+    useBP = findobj(fig, 'Tag', 'BPCheck').Value;
+    bp_f1 = findobj(fig, 'Tag', 'BPF1').Value;
+    bp_f2 = findobj(fig, 'Tag', 'BPF2').Value;
+
+    useLP = findobj(fig, 'Tag', 'LPCheck').Value;
+    lp_fc = findobj(fig, 'Tag', 'LPFC').Value;
     
-    plot_awgn_signal(BW, Pout_noise_user, true, 3e9, 7e9, true, 7e9)
+    figure;
+    plot_awgn_signal(BW, Pout_noise_user, useBP, bp_f1, bp_f2, useLP, lp_fc)
+    figure;
+    plot_awgn_signal(BW, Pout_noise_best, useBP, bp_f1, bp_f2, useLP, lp_fc)
 end
 
 

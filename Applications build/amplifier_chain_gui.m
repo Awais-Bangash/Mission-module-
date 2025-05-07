@@ -17,7 +17,7 @@ function amplifier_chain_gui()
         'ButtonPushedFcn', @(btn,event) generateFields(fig, nField.Value));
 
 end
-
+%% 
 function generateFields(fig, n)
     % Clear previous amplifier panel if it exists
     delete(findall(fig, 'Tag', 'AmpPanel'));
@@ -63,7 +63,7 @@ function generateFields(fig, n)
         'Position', [20 y - 100 100 30], ...
         'ButtonPushedFcn', @(btn,event) calculateNF(fig, n));
 end
-
+%%
 function calculateNF(fig, n)
     gains_dB = zeros(1, n);
     NFs_dB = zeros(1, n);
