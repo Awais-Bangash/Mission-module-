@@ -273,6 +273,7 @@ function plot_awgn_signal(bandwidth, P_dBm, useBP, bp_f1, bp_f2, useLP, lp_fc, b
     end
     xlim(xlimFD)
     ylim(ylimFD);
+    yline(P_dBm, 'g', 'Output Noise Power')
 
     if useBP
         max_val = max(MagFFT_bp_dBm); 
@@ -295,6 +296,7 @@ function plot_awgn_signal(bandwidth, P_dBm, useBP, bp_f1, bp_f2, useLP, lp_fc, b
         xline(bp_f2/1e9, '--k', 'LineWidth', 2.5);
         xline(-bp_f1/1e9, '--k', 'LineWidth', 2.5);
         xline(-bp_f2/1e9, '--k', 'LineWidth', 2.5);
+        yline(P_dBm, 'g', 'Output Noise Power')
     end
 
     if useLP
@@ -316,5 +318,6 @@ function plot_awgn_signal(bandwidth, P_dBm, useBP, bp_f1, bp_f2, useLP, lp_fc, b
         ylim(ylimFD);
         xline(lp_fc/1e9, '--k', 'LineWidth', 2.5); % Plot LP filter cutoff
         xline(-lp_fc/1e9, '--k', 'LineWidth', 2.5);
+        yline(P_dBm, 'g', 'Output Noise Power')
     end
 end
